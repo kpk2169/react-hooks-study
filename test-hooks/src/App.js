@@ -45,6 +45,16 @@ const useTabs = (initialTab, allTabs) => {
   };
 };
 
+const useTitle = (initialTitle) => {
+  const [title, setTitle] = useState(initialTitle);
+  const updateTitle = () => {
+    const htmlTitle = document.querySelector("title");
+    htmlTitle.innerText = title;
+  }
+  useEffect(updateTitle, [title]);
+  return setTitle;
+};
+
 // useEffect 
 
 function App() {
@@ -65,7 +75,8 @@ function App() {
   const [aNumber1, setAnumber] = useState(0);
   // useffect , 첫 번째 인자로 실행시킬 함수를 받고, 두 번째는 값 변경을 감지할 변수 ...  [] 안의 변수가 변경될 때만 실행되게 할 수 있다...
   // componentDidMount, ComponentWillUnMount, ComponentDidUpdate 등의 변화를 감지할 수 있다...
-  useEffect(sayHello , [number1]);
+  useEffect(sayHello, [number1]);
+  const titleUpdater = useTitle("Loading...");
   
   return (
     <div className="App">
