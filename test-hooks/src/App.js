@@ -88,6 +88,16 @@ const useConfirm = (message = "", callback, rejection) => {
   return confirmAction;
 }
 
+const usePreventLeave = () => {
+  const listener = (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+  };
+  const enablePrevent = () => window.addEventListener("beforeunload", listener);
+  const disablePrevent = () => window.removeEventListener("beforeunload", listener);
+  return { enablePrevent, disablePrevent };
+}
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -116,6 +126,9 @@ function App() {
   const deleteWorld = () => console.log("Click Deleting the World!!!");
   const abort = () => console.log("Aborted");
   const confirmDelete = useConfirm("Are you sure", deleteWorld, abort);
+
+  const { enablePrevent, disablePrevent } = usePreventLeave();
+
   return (
     <div className="App">
     <h1>Create React App { item }</h1>
@@ -143,6 +156,9 @@ function App() {
         <h1 ref={titleClick}>Hi</h1>
         <br></br>
         <button onClick={confirmDelete}>Delete the world</button>
+        <br />
+        <button onClick={enablePrevent}>Protect</button>
+        <button onClick={disablePrevent}>UnProtect</button>
       </div>
     </div>
     );
