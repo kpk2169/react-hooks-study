@@ -74,6 +74,20 @@ const useClick = (onClick) => {
   return element;
 }
 
+const useConfirm = (message = "", callback, rejection) => {
+  // if (typeof callback !== fuction) {
+  //   return;
+  // }
+  const confirmAction = () => {
+    if (window.confirm(message)) {
+      callback();
+    } else {
+      rejection();
+    }
+  }
+  return confirmAction;
+}
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -99,6 +113,9 @@ function App() {
 
   const titleClick = useClick(sayHello);
 
+  const deleteWorld = () => console.log("Click Deleting the World!!!");
+  const abort = () => console.log("Aborted");
+  const confirmDelete = useConfirm("Are you sure", deleteWorld, abort);
   return (
     <div className="App">
     <h1>Create React App { item }</h1>
@@ -124,6 +141,8 @@ function App() {
         <br></br>
         <input ref={potato} placeholder="la" />
         <h1 ref={titleClick}>Hi</h1>
+        <br></br>
+        <button onClick={confirmDelete}>Delete the world</button>
       </div>
     </div>
     );
