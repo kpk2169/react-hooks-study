@@ -19,6 +19,32 @@ const useInput = (initialValue, validator) => {
   return {value, onChange}
 };
 
+const content = [
+  {
+    tab: "Section 1",
+    content: "I'm the content of Section1"
+  },
+  {
+    tab: "Section 2",
+    content: "I'm the content of Section2"
+  },
+  {
+    tab: "Section 3",
+    content: "I'm the content of Section3"
+  }
+
+];
+
+const useTabs = (initialTab, allTabs) => {
+  // if (!allTabs || !Array.isArray(allTabs)) {
+  //   return;
+  // }
+  const [currentIndex, setCurrentIndex] = useState(initialTab);
+  return {
+    currentItem: allTabs[currentIndex]
+  };
+};
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -27,6 +53,7 @@ function App() {
   const MaxLen = (value) => value.length <= 10;
   const name = useInput("Mr.",MaxLen);
   
+  const {currentItem} = useTabs(0, content);
   
   return (
     <div className="App">
@@ -36,7 +63,15 @@ function App() {
       <button onClick={decrementItem}>-</button>
       <br />
       <br/>
-      <input placeholder="Name" {...name}/>
+      <input placeholder="Name" {...name} />
+      <br/>
+      <br/>
+      <div>
+        {content.map(section => <button>{section.tab}</button>)}
+      </div>
+      <div>
+        <h5>{ currentItem.content }</h5>
+      </div>
     </div>
     );
   }
