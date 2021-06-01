@@ -146,6 +146,18 @@ const useNetwork = onChange => {
   return status;
 }
 
+const useScroll = () => {
+  const [state, setState] = useState({ x: 0, y: 0 });
+  const onScroll = () => {
+    setState({y:window.scrollY,x:window.scrollX})
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  },[]);
+  return state;
+}
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -186,12 +198,13 @@ function App() {
     console.log(online ? "we just online" : "offline");
   }
   const onLine = useNetwork(habdleNetworkChange);
+  const { y } = useScroll();
   return (
-    <div className="App">
+    <div className="App" style={{height:"1000vh"}}>
       <h1 {...fadeInH1}>Create React App {item}</h1>
       <p {...fadeInP}>akfdjkfjsdjlfnasjnfsjdnfjaksdnf</p>
       <h5>Network status : { onLine ? " OK" : " Fail" }</h5>
-    <h5>Start editomng to see some magic happen!</h5>
+    <h5 style={{position: "fixed", color: y > 100 ? "red" : "blue"}}>Start editomng to see some magic happen!</h5>
     <button onClick={incrementItem}>+</button>
       <button onClick={decrementItem}>-</button>
       <br />
