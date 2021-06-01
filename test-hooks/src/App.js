@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // validator 유효성 검사를 위해서 추가 
 const useInput = (initialValue, validator) => {
@@ -55,7 +55,24 @@ const useTitle = (initialTitle) => {
   return setTitle;
 };
 
-// useEffect 
+const useClick = (onClick) => {
+
+  // if (typeof onclick !== "function") {
+  //   return;
+  // }
+  const element = useRef(); // reference
+  useEffect(() => {
+    if (element.current) {
+      element.current.addEventListener("click", onClick);
+    }
+    return () => {
+      if (element.current) {
+        element.current.removeEventListener("click", onClick)
+      }
+    };
+  }, []);
+  return element;
+}
 
 function App() {
   const [item, setItem] = useState(1);
@@ -77,7 +94,11 @@ function App() {
   // componentDidMount, ComponentWillUnMount, ComponentDidUpdate 등의 변화를 감지할 수 있다...
   useEffect(sayHello, [number1]);
   const titleUpdater = useTitle("Loading...");
-  
+
+  const potato = useRef();
+
+  const titleClick = useClick(sayHello);
+
   return (
     <div className="App">
     <h1>Create React App { item }</h1>
@@ -98,6 +119,11 @@ function App() {
       <div>
         <button onClick={() => setNumber(number1 + 1)}> { number1 }</button>
         <button onClick={() => setAnumber(aNumber1 + 1)}> { aNumber1 }</button>
+      </div>
+      <div>
+        <br></br>
+        <input ref={potato} placeholder="la" />
+        <h1 ref={titleClick}>Hi</h1>
       </div>
     </div>
     );
