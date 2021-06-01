@@ -98,6 +98,34 @@ const usePreventLeave = () => {
   return { enablePrevent, disablePrevent };
 }
 
+const useBeforeLeave = (onBefore) => {
+  // if (typeof onBefore) {
+  //   return;
+  // }
+  const handle = (event) => {
+    const { clientY } = event;
+    if (clientY <= 0) {
+      onBefore();
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mouseleave", handle);
+    return () => document.removeEventListener("mouseleave", handle);
+  }, []);
+}
+
+const useFadeIn = (duration = 1, delay = 0) => {
+  const element = useRef();
+  useEffect(() => {
+    if (element.current) {
+      const { current } = element;
+      current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
+      current.style.opacity = 1;
+    }
+  }, []);
+  return {ref:element, style: {opacity:0}};
+}
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -128,10 +156,15 @@ function App() {
   const confirmDelete = useConfirm("Are you sure", deleteWorld, abort);
 
   const { enablePrevent, disablePrevent } = usePreventLeave();
-
+  const beforLife = () => console.log("plz don't leave");
+  useBeforeLeave(beforLife);
+  
+  const fadeInH1 = useFadeIn(1,2);
+  const fadeInP = useFadeIn(5,10);
   return (
     <div className="App">
-    <h1>Create React App { item }</h1>
+      <h1 {...fadeInH1}>Create React App {item}</h1>
+      <p {...fadeInP}>akfdjkfjsdjlfnasjnfsjdnfjaksdnf</p>
     <h2>Start editomng to see some magic happen!</h2>
     <button onClick={incrementItem}>+</button>
       <button onClick={decrementItem}>-</button>
