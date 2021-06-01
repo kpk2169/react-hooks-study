@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // validator 유효성 검사를 위해서 추가 
 const useInput = (initialValue, validator) => {
@@ -45,6 +45,8 @@ const useTabs = (initialTab, allTabs) => {
   };
 };
 
+// useEffect 
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -54,6 +56,16 @@ function App() {
   const name = useInput("Mr.",MaxLen);
   
   const {currentItem} = useTabs(0, content);
+  
+  const sayHello = () => console.log("sayHello");
+  // useEffect(() => {
+  //   sayHello();
+  // });
+  const [number1, setNumber ] = useState(0);
+  const [aNumber1, setAnumber] = useState(0);
+  // useffect , 첫 번째 인자로 실행시킬 함수를 받고, 두 번째는 값 변경을 감지할 변수 ...  [] 안의 변수가 변경될 때만 실행되게 할 수 있다...
+  // componentDidMount, ComponentWillUnMount, ComponentDidUpdate 등의 변화를 감지할 수 있다...
+  useEffect(sayHello , [number1]);
   
   return (
     <div className="App">
@@ -71,6 +83,10 @@ function App() {
       </div>
       <div>
         <h5>{ currentItem.content }</h5>
+      </div>
+      <div>
+        <button onClick={() => setNumber(number1 + 1)}> { number1 }</button>
+        <button onClick={() => setAnumber(aNumber1 + 1)}> { aNumber1 }</button>
       </div>
     </div>
     );
