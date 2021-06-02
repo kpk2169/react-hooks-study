@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
-
+import useAxios from "./Hooks/useAxios";
 // validator 유효성 검사를 위해서 추가 
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
@@ -198,6 +198,7 @@ const useNotification = (title, options) => {
   return fireNotif;
 }
 
+
 function App() {
   const [item, setItem] = useState(1);
   const incrementItem = () => setItem(item + 1);
@@ -246,7 +247,8 @@ function App() {
   const { fullScrEl, triggerFull, exitFull } = useFullscreen(onFullS);
   
   const fireNotif = useNotification("Can I steal your money? thay's no no", { body: "I love money don't you?" });
-  
+  const { loading, data, error, refetch } = useAxios({ url: "https://yts.mx/api/v2/list_movies.json" });
+  console.log(`Loading: ${loading} \nError: ${error} \nData: ${JSON.stringify(data)} `);
   return (
     <div className="App" style={{height:"1000vh"}}>
       <h1 {...fadeInH1}>Create React App {item}</h1>
@@ -287,6 +289,9 @@ function App() {
       <button onClick={triggerFull}>Make Full Screen</button>
       <br />
       <button onClick={fireNotif}>Noti Hi</button>
+      <h1>{data && data.status}</h1>
+      <h2>{ loading && "Loading..."}</h2>
+      <button onClick={refetch}>Refectch</button>
     </div>
     );
   }
